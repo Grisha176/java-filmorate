@@ -5,15 +5,16 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+
 import java.time.LocalDate;
 
 @Data
-@Setter
 @Getter
+@Setter
 public class User {
 
     private Long id;
-    @NotBlank(message = "имеил не может быть пустым")
+    @NotBlank(message = "email не может быть пустым")
     @Email(message = "неверный email формат")
     private String email;
     @NotBlank(message = "Логин не может быть пустым")

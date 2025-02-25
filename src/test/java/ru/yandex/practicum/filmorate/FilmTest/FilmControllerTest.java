@@ -33,7 +33,7 @@ public class FilmControllerTest {
         Film film = new Film();
         film.setName("Valid Film");
         film.setDescription("This is a valid description.");
-        film.setReleaseDate(LocalDate.now());
+        film.setReleaseDate(LocalDate.of(1999,1,10));
         film.setDuration(120);
 
         ObjectMapper objectMapper = new ObjectMapper();

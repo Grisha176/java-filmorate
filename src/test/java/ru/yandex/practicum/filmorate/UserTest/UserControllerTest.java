@@ -95,7 +95,7 @@ public class UserControllerTest {
     void updateUserReturnStatus200() throws Exception {
         User newUser = new User();
         newUser.setId(1L);
-        newUser.setEmail("original@example.com");
+        newUser.setEmail("yandex@example.com");
         newUser.setLogin("login");
         newUser.setName("nameUser");
         newUser.setBirthday(LocalDate.of(2000, 1, 1));
@@ -135,8 +135,8 @@ public class UserControllerTest {
         user.setLogin("login2");
         user.setEmail("user2@example.ru");
         user.setBirthday(LocalDate.of(2000, 10, 10));
-        userController.createUser(user);
-        userController.createUser(user2);
+        userController.addUser(user);
+        userController.addUser(user2);
 
         mockMvc.perform(get("/users")
                         .contentType(MediaType.APPLICATION_JSON))

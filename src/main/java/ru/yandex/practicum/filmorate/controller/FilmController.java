@@ -24,7 +24,7 @@ public class FilmController {
     private final Map<Long, Film> films = new HashMap<>();
 
     @PostMapping
-    public Film addFilm(@Valid @RequestBody final Film film) {
+    public Film addFilm(@Valid @RequestBody  Film film) {
         validateFilm(film);
         film.setId(getNextId());
         if (films.containsKey(film.getId())) {
