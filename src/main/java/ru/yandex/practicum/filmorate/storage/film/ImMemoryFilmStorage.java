@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class ImMemoryFilmStorage implements FilmStorage{
+public class ImMemoryFilmStorage implements FilmStorage {
 
     private final Map<Long, Film> films = new HashMap<>();
 
@@ -49,7 +49,7 @@ public class ImMemoryFilmStorage implements FilmStorage{
     }
 
     @Override
-    public Film getFilmById(Long id){
+    public Film getFilmById(Long id) {
         return films.get(id);
     }
 

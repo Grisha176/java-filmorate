@@ -31,21 +31,22 @@ public class FilmController {
         this.filmStorage = filmStorage;
         this.filmService = filmService;
     }
-    public FilmController(){
+
+    public FilmController() {
         UserStorage userStorage = new InMemoryUserStorage();
         filmStorage = new ImMemoryFilmStorage();
-        filmService = new FilmService(filmStorage,userStorage);
+        filmService = new FilmService(filmStorage, userStorage);
     }
 
 
     @PostMapping
-    public Film addFilm(@Valid @RequestBody  Film film) {
-       return filmStorage.addFilm(film);
+    public Film addFilm(@Valid @RequestBody Film film) {
+        return filmStorage.addFilm(film);
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public ResponseEntity<String> addLikeFilm(@PathVariable("id") Long filmId,@PathVariable("userId") Long userId){
-        filmService.addLike(filmId,userId);
+    public ResponseEntity<String> addLikeFilm(@PathVariable("id") Long filmId, @PathVariable("userId") Long userId) {
+        filmService.addLike(filmId, userId);
         return new ResponseEntity<>("{\"message\":\"Добавление лайка прошло успешно\"}", HttpStatus.OK);
     }
 
@@ -61,16 +62,15 @@ public class FilmController {
     }
 
     @GetMapping("/popular")
-    public List<Film> getMostPopularFilm(@RequestParam(defaultValue = "10") int count){
+    public List<Film> getMostPopularFilm(@RequestParam(defaultValue = "10") int count) {
         return filmService.getTheMostPopularFilm(count);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public ResponseEntity<String> deleteLikeFilm(@PathVariable("id") Long filmId,@PathVariable("userId") Long userId){
-        filmService.deleteLike(filmId,userId);
+    public ResponseEntity<String> deleteLikeFilm(@PathVariable("id") Long filmId, @PathVariable("userId") Long userId) {
+        filmService.deleteLike(filmId, userId);
         return new ResponseEntity<>("{\"message\":\"Удаление лайка прошло успешно\"}", HttpStatus.OK);
     }
-
 
 
 }

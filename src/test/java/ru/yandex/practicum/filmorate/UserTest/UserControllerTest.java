@@ -28,7 +28,7 @@ public class UserControllerTest {
     private final UserStorage userStorage;
 
     @Autowired
-    public UserControllerTest(UserStorage userStorage){
+    public UserControllerTest(UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 

@@ -25,15 +25,15 @@ public class UserController {
 
 
     @Autowired
-    public UserController(UserStorage userStorage,UserService userService){
+    public UserController(UserStorage userStorage, UserService userService) {
         this.userStorage = userStorage;
         this.userService = userService;
     }
-    public UserController(){
+
+    public UserController() {
         userStorage = new InMemoryUserStorage();
         userService = new UserService(userStorage);
     }
-
 
 
     @GetMapping("/users")
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User getUsersById(@PathVariable Long id){
+    public User getUsersById(@PathVariable Long id) {
         return userStorage.getUserById(id);
     }
 
@@ -58,25 +58,25 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}/friends/{friendId}")
-    public ResponseEntity<String> addFriend(@PathVariable("id") Long userId,@PathVariable("friendId") Long friendId){
-        userService.addFriend(userId,friendId);
-        return new ResponseEntity<>("{ \"message\": \"Добавление прошло успешно!\" }",HttpStatus.OK);
+    public ResponseEntity<String> addFriend(@PathVariable("id") Long userId, @PathVariable("friendId") Long friendId) {
+        userService.addFriend(userId, friendId);
+        return new ResponseEntity<>("{ \"message\": \"Добавление прошло успешно!\" }", HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}/friends/{friendId}")
-    public ResponseEntity<String> deleteFromFriend(@PathVariable("id") Long userId,@PathVariable Long friendId){
-        userService.deleteFriend(userId,friendId);
-        return new ResponseEntity<>("{ \"message\": \"Удаление прошло успешено!\" }",HttpStatus.OK);
+    public ResponseEntity<String> deleteFromFriend(@PathVariable("id") Long userId, @PathVariable Long friendId) {
+        userService.deleteFriend(userId, friendId);
+        return new ResponseEntity<>("{ \"message\": \"Удаление прошло успешено!\" }", HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}/friends")
-    public Set<User> getUserFriend(@PathVariable Long id){
+    public Set<User> getUserFriend(@PathVariable Long id) {
         return userService.getUserFriend(id);
     }
 
     @GetMapping("/users/{id}/friends/common/{otherId}")
-    public Set<User> getMutualFriends(@PathVariable("id") Long firstUserId,@PathVariable("otherId") Long secondUserId){
-        return userService.getMutualFriends(firstUserId,secondUserId);
+    public Set<User> getMutualFriends(@PathVariable("id") Long firstUserId, @PathVariable("otherId") Long secondUserId) {
+        return userService.getMutualFriends(firstUserId, secondUserId);
     }
 
 
