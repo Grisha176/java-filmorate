@@ -28,7 +28,6 @@ public class FilmService {
     public void addLike(Long filmId, Long userId) {
         validate(filmId, userId);
         filmStorage.getFilmById(filmId).getLikesByUsers().add(userId);
-        ;
         log.info("Добавление лайка");
     }
 
