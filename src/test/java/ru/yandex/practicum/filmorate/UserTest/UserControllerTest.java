@@ -5,11 +5,14 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 
@@ -18,11 +21,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 
+@SpringBootTest
 public class UserControllerTest {
 
     private MockMvc mockMvc;
+    private final UserStorage userStorage;
 
-    UserController userController = new UserController();
+    @Autowired
+    public UserControllerTest(UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
 
     @BeforeEach
     public void setUp() {
@@ -135,8 +143,8 @@ public class UserControllerTest {
         user.setLogin("login2");
         user.setEmail("user2@example.ru");
         user.setBirthday(LocalDate.of(2000, 10, 10));
-        userController.addUser(user);
-        userController.addUser(user2);
+        userStorage.addUser(user);
+        userStorage.addUser(user2);
 
         mockMvc.perform(get("/users")
                         .contentType(MediaType.APPLICATION_JSON))

@@ -2,17 +2,19 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.ImMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.time.LocalDate;
+
 import java.util.*;
 
 
@@ -21,49 +23,54 @@ import java.util.*;
 @Slf4j
 public class FilmController {
 
-    private final Map<Long, Film> films = new HashMap<>();
+    private final FilmStorage filmStorage;
+    private final FilmService filmService;
+
+    @Autowired
+    public FilmController(FilmStorage filmStorage, FilmService filmService) {
+        this.filmStorage = filmStorage;
+        this.filmService = filmService;
+    }
+
+    public FilmController() {
+        UserStorage userStorage = new InMemoryUserStorage();
+        filmStorage = new ImMemoryFilmStorage();
+        filmService = new FilmService(filmStorage, userStorage);
+    }
+
 
     @PostMapping
-    public Film addFilm(@Valid @RequestBody  Film film) {
-        validateFilm(film);
-        film.setId(getNextId());
-        if (films.containsKey(film.getId())) {
-            log.warn("Фильм с id {} уже существует", film.getId());
-            throw new ValidationException("Такой фильм уже существует");
-        }
-        films.put(film.getId(), film);
-        log.info("Добавлен фильм: {}", film);
-        return film;
+    public Film addFilm(@Valid @RequestBody Film film) {
+        return filmStorage.addFilm(film);
     }
+
+    @PutMapping("/{id}/like/{userId}")
+    public ResponseEntity<String> addLikeFilm(@PathVariable("id") Long filmId, @PathVariable("userId") Long userId) {
+        filmService.addLike(filmId, userId);
+        return new ResponseEntity<>("{\"message\":\"Добавление лайка прошло успешно\"}", HttpStatus.OK);
+    }
+
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody final Film film) {
-        validateFilm(film);
-        if (!films.containsKey(film.getId())) {
-            log.error("Фильм с id {} не найден", film.getId());
-            throw new ValidationException("Фильм с id:" + film.getId() + " не найден");
-        }
-        films.put(film.getId(), film);
-        log.info("Обновлен фильм: {}", film);
-        return film;
+        return filmStorage.updateFilm(film);
     }
 
     @GetMapping
     public Collection<Film> getAllFilms() {
-        log.info("Запрошен список всех фильмов");
-        return films.values();
+        return filmStorage.getAllFilms();
     }
 
-    private void validateFilm(final Film film) {
-        LocalDate dateFilm = LocalDate.of(1895, 12, 28);
-        if (film.getReleaseDate().isBefore(dateFilm)) {
-            log.error("Дата релиза раньше 28 декабря 1895 года: {}", film.getReleaseDate());
-            throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
-        }
+    @GetMapping("/popular")
+    public List<Film> getMostPopularFilm(@RequestParam(defaultValue = "10") int count) {
+        return filmService.getTheMostPopularFilm(count);
     }
 
-    private long getNextId() {
-        long id = films.keySet().stream().mapToLong(Long::longValue).max().orElse(0);
-        return ++id;
+    @DeleteMapping("/{id}/like/{userId}")
+    public ResponseEntity<String> deleteLikeFilm(@PathVariable("id") Long filmId, @PathVariable("userId") Long userId) {
+        filmService.deleteLike(filmId, userId);
+        return new ResponseEntity<>("{\"message\":\"Удаление лайка прошло успешно\"}", HttpStatus.OK);
     }
+
+
 }
