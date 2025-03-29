@@ -36,6 +36,7 @@ Template repository for Filmorate project.
 
 ## Примеры запросов
 
+
 ### - Добавление фильма
 
 ```sql
