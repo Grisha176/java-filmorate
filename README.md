@@ -5,11 +5,8 @@ Template repository for Filmorate project.
 ![ER-диаграмма базы данных](src/main/resources/er-diagramma.png)
 
 ---
-
 ## Описание схемы
-
 База данных предназначена для хранения фильмов, пользователей,оценок,связи между ними.
-
 
 ### Таблицы
 
