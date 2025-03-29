@@ -7,15 +7,15 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class ImMemoryFilmStorage implements FilmStorage {
 
     private final Map<Long, Film> films = new HashMap<>();
+    private static Map<Long, Set<Long>> filmLikes = new HashMap<>();
 
     @Override
     public Film addFilm(Film film) {
@@ -51,6 +51,27 @@ public class ImMemoryFilmStorage implements FilmStorage {
     @Override
     public Film getFilmById(Long id) {
         return films.get(id);
+    }
+
+    public void addLike(Long filmId, Long userId) {
+        Set<Long> likes = filmLikes.getOrDefault(filmId, new HashSet<>());
+        likes.add(userId);
+        filmLikes.put(filmId, likes);
+    }
+    public void deleteLike(Long filmId,Long userId){
+        if (filmLikes.get(filmId).contains(userId)) {
+            log.trace("Пользователь с id" + userId + " не ставил лайк фильму с id " + filmId);
+            throw new NotFoundException("Пользователь с id" + userId + " не ставил лайк фильму с id " + filmId);
+        }
+        filmLikes.get(filmId).remove(userId);
+    }
+
+    public Set<Film> getTheMostPopularFilm(int count){
+        if (getAllFilms() == null) {
+            log.trace("Фильмы не найдены");
+            throw new NotFoundException("Не удалось найти фильмы");
+        }
+        return getAllFilms().stream().sorted(Comparator.comparing(film -> filmLikes.get(film.getId()).size())).collect(Collectors.toSet());
     }
 
     private void validateFilm(final Film film) {

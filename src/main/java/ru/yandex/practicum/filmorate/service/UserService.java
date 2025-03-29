@@ -29,32 +29,39 @@ public class UserService {
             log.trace("Попытка добавить в друзья самого себя - исключение");
             throw new InvalidFriendRequestException("Невозможно добавить в друзья самого себя");
         }
-        userStorage.getUserById(userId).getFriends().add(friendId);
-        userStorage.getUserById(friendId).getFriends().add(userId);
+        userStorage.addFriend(userId,friendId);
+        /*userStorage.getUserById(userId).getFriends().add(friendId);
+        userStorage.getUserById(friendId).getFriends().add(userId);*/
         log.info("Успешное добавление в друзья");
     }
 
     public void deleteFriend(Long userId, Long friendId) {
         validate(userId, friendId);
-        if (!userStorage.getUserById(userId).getFriends().contains(friendId)) {
+        /*if (!userStorage.getUserById(userId).getFriends().contains(friendId)) {
             log.trace("Провал писка друга-выброс исключения");
             throw new DeletedNotFoundFriendException("Друг с id " + friendId + " не найден");
         }
         userStorage.getUserById(userId).getFriends().remove(friendId);
-        userStorage.getUserById(friendId).getFriends().remove(userId);
+        userStorage.getUserById(friendId).getFriends().remove(userId);*/
+        userStorage.deleteFriend(userId,friendId);
         log.info("Успешное удаление друга");
     }
 
 
     public Set<User> getMutualFriends(Long firstUserId, Long secondUserId) {
         validate(firstUserId, secondUserId);
-        User firstUser = userStorage.getUserById(firstUserId);
+       /* User firstUser = userStorage.getUserById(firstUserId);
         User secondUser = userStorage.getUserById(secondUserId);
         log.info("Поиск и возврат общих друзей");
         Set<User> mutualFriends = firstUser.getFriends().stream().filter(secondUser.getFriends()::contains).map(userStorage::getUserById).collect(Collectors.toSet());
         if (mutualFriends.isEmpty()) {
             log.trace("Общих друзей у пользователей с id: " + firstUserId + " и " + secondUser + " не найдено");
             throw new NotFoundException("Общих друзей у пользователей с id: " + firstUserId + " и " + secondUser + " не найдено");
+        }*/
+        Set<User> mutualFriends = userStorage.getMutualFriends(firstUserId,secondUserId);
+        if (mutualFriends.isEmpty()) {
+            log.trace("Общих друзей у пользователей с id: " + firstUserId + " и " + secondUserId + " не найдено");
+            throw new NotFoundException("Общих друзей у пользователей с id: " + firstUserId + " и " + secondUserId + " не найдено");
         }
         return mutualFriends;
     }
@@ -65,9 +72,8 @@ public class UserService {
             log.trace("Провал поиска user с id: " + userId);
             throw new NotFoundException("Пользователь с id " + userId + " не найден");
         }
-        log.info("Возврат поика друзей");
-        return userStorage.getUserById(userId).getFriends().stream().map(userStorage::getUserById) // Преобразуем каждый ID в объект User
-                .collect(Collectors.toSet());
+        log.info("Возврат поиcка друзей");
+        return userStorage.getUserFriend(userId);
     }
 
     private void validate(Long firstId, Long secondId) {

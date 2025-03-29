@@ -64,6 +64,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}/friends/{friendId}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deleteFromFriend(@PathVariable("id") Long userId, @PathVariable Long friendId) {
         userService.deleteFriend(userId, friendId);
         return new ResponseEntity<>("{ \"message\": \"Удаление прошло успешено!\" }", HttpStatus.OK);
