@@ -12,6 +12,7 @@ public enum MpaRating {
     NC_17("Лицам до 18 лет просмотр запрещён");
 
     private final String description;
+
     MpaRating(String description) {
         this.description = description;
     }
