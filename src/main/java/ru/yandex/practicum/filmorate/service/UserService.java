@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.DeletedNotFoundFriendException;
 import ru.yandex.practicum.filmorate.exception.InvalidFriendRequestException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -11,7 +10,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 
 import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -29,7 +28,7 @@ public class UserService {
             log.trace("Попытка добавить в друзья самого себя - исключение");
             throw new InvalidFriendRequestException("Невозможно добавить в друзья самого себя");
         }
-        userStorage.addFriend(userId,friendId);
+        userStorage.addFriend(userId, friendId);
         /*userStorage.getUserById(userId).getFriends().add(friendId);
         userStorage.getUserById(friendId).getFriends().add(userId);*/
         log.info("Успешное добавление в друзья");
@@ -43,7 +42,7 @@ public class UserService {
         }
         userStorage.getUserById(userId).getFriends().remove(friendId);
         userStorage.getUserById(friendId).getFriends().remove(userId);*/
-        userStorage.deleteFriend(userId,friendId);
+        userStorage.deleteFriend(userId, friendId);
         log.info("Успешное удаление друга");
     }
 
@@ -58,7 +57,7 @@ public class UserService {
             log.trace("Общих друзей у пользователей с id: " + firstUserId + " и " + secondUser + " не найдено");
             throw new NotFoundException("Общих друзей у пользователей с id: " + firstUserId + " и " + secondUser + " не найдено");
         }*/
-        Set<User> mutualFriends = userStorage.getMutualFriends(firstUserId,secondUserId);
+        Set<User> mutualFriends = userStorage.getMutualFriends(firstUserId, secondUserId);
         if (mutualFriends.isEmpty()) {
             log.trace("Общих друзей у пользователей с id: " + firstUserId + " и " + secondUserId + " не найдено");
             throw new NotFoundException("Общих друзей у пользователей с id: " + firstUserId + " и " + secondUserId + " не найдено");

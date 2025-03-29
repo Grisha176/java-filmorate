@@ -58,7 +58,8 @@ public class ImMemoryFilmStorage implements FilmStorage {
         likes.add(userId);
         filmLikes.put(filmId, likes);
     }
-    public void deleteLike(Long filmId,Long userId){
+
+    public void deleteLike(Long filmId, Long userId) {
         if (filmLikes.get(filmId).contains(userId)) {
             log.trace("Пользователь с id" + userId + " не ставил лайк фильму с id " + filmId);
             throw new NotFoundException("Пользователь с id" + userId + " не ставил лайк фильму с id " + filmId);
@@ -66,7 +67,7 @@ public class ImMemoryFilmStorage implements FilmStorage {
         filmLikes.get(filmId).remove(userId);
     }
 
-    public Set<Film> getTheMostPopularFilm(int count){
+    public Set<Film> getTheMostPopularFilm(int count) {
         if (getAllFilms() == null) {
             log.trace("Фильмы не найдены");
             throw new NotFoundException("Не удалось найти фильмы");

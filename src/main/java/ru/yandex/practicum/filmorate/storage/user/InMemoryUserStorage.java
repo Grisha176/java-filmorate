@@ -7,7 +7,7 @@ import ru.yandex.practicum.filmorate.exception.DuplicateException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.model.userEnums.friendshipStatus;
+import ru.yandex.practicum.filmorate.model.userEnums.friendship_status;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class InMemoryUserStorage implements UserStorage {
 
     private final Map<Long, User> users = new HashMap<>();
-    private final Map<Long, Map<Long, friendshipStatus>> userFriends = new HashMap<>();
+    private final Map<Long, Map<Long, friendship_status>> userFriends = new HashMap<>();
 
     @Override
     public Collection<User> findAllUsers() {
@@ -78,29 +78,29 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public void addFriend(Long userId, Long friendId) {
         // Получаем карту друзей для обоих пользователей
-        Map<Long, friendshipStatus> userFriendIds = userFriends.computeIfAbsent(userId, id -> new HashMap<>());
-        Map<Long, friendshipStatus> fFriendIds = userFriends.computeIfAbsent(friendId, id -> new HashMap<>());
+        Map<Long, friendship_status> userFriendIds = userFriends.computeIfAbsent(userId, id -> new HashMap<>());
+        Map<Long, friendship_status> fFriendIds = userFriends.computeIfAbsent(friendId, id -> new HashMap<>());
         // Проверяем статус дружбы между пользователями
-        friendshipStatus statusFromFriend = fFriendIds.get(userId);
-        if (friendshipStatus.CONFIRMED.equals(statusFromFriend)) {
+        friendship_status statusFromFriend = fFriendIds.get(userId);
+        if (friendship_status.CONFIRMED.equals(statusFromFriend)) {
             log.info("Пользователи {} и {} уже являются друзьями", userId, friendId);
             return;
         }
-        if (friendshipStatus.PENDING.equals(statusFromFriend)) {
+        if (friendship_status.PENDING.equals(statusFromFriend)) {
             // Если обратная заявка уже существует, подтверждаем дружбу
-            userFriendIds.put(friendId, friendshipStatus.CONFIRMED);
-            fFriendIds.put(userId, friendshipStatus.CONFIRMED);
+            userFriendIds.put(friendId, friendship_status.CONFIRMED);
+            fFriendIds.put(userId, friendship_status.CONFIRMED);
             log.info("Пользователи {} и {} теперь друзья", userId, friendId);
         } else {
             // Если обратной заявки нет, создаем новую заявку со статусом PENDING
-            userFriendIds.put(friendId, friendshipStatus.PENDING);
+            userFriendIds.put(friendId, friendship_status.PENDING);
             log.info("Пользователь {} отправил заявку в друзья пользователю {}", userId, friendId);
         }
     }
 
     @Override
     public void deleteFriend(Long userId, Long friendId) {
-        Map<Long, friendshipStatus> userFriendsIds = userFriends.get(userId);
+        Map<Long, friendship_status> userFriendsIds = userFriends.get(userId);
         if (userFriendsIds == null) {
             throw new DeletedNotFoundFriendException("Друзья не найдены");
         }
@@ -136,7 +136,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     private Set<User> getConfirmedFriends(Long userId) {
         return userFriends.getOrDefault(userId, Collections.emptyMap()).entrySet().stream()
-                .filter(entry -> entry.getValue() == friendshipStatus.CONFIRMED)
+                .filter(entry -> entry.getValue() == friendship_status.CONFIRMED)
                 .map(Map.Entry::getKey)
                 .map(users::get)
                 .collect(Collectors.toSet());

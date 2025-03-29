@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.model.userEnums;
 
-public enum friendshipStatus {
+public enum friendship_status {
     PENDING,
     CONFIRMED
 }

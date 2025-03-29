@@ -10,9 +10,7 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -28,13 +26,13 @@ public class FilmService {
 
     public void addLike(Long filmId, Long userId) {
         validate(filmId, userId);
-        filmStorage.addLike(filmId,userId);
+        filmStorage.addLike(filmId, userId);
         log.info("Добавление лайка");
     }
 
     public void deleteLike(Long filmId, Long userId) {
         validate(filmId, userId);
-        filmStorage.deleteLike(filmId,userId);
+        filmStorage.deleteLike(filmId, userId);
         log.info("Успешное даление лайка");
     }
 
