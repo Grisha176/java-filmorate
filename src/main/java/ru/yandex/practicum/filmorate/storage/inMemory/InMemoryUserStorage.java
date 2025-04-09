@@ -1,4 +1,5 @@
-package ru.yandex.practicum.filmorate.storage.user;
+/*
+package ru.yandex.practicum.filmorate.storage.inMemory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.userEnums.FriendShipStatus;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +23,7 @@ public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, Map<Long, FriendShipStatus>> userFriends = new HashMap<>();
 
     @Override
-    public Collection<User> findAllUsers() {
+    public Collection<User> getAllUsers() {
         log.info("Получение всех пользователей");
         return users.values();
     }
@@ -71,7 +73,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User getUserById(Long id) {
+    public Optional<User> getUserById(Long id) {
         return users.get(id);
     }
 
@@ -99,7 +101,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void deleteFriend(Long userId, Long friendId) {
+    public boolean deleteFriend(Long userId, Long friendId) {
         Map<Long, FriendShipStatus> userFriendsIds = userFriends.get(userId);
         if (userFriendsIds == null) {
             throw new DeletedNotFoundFriendException("Друзья не найдены");
@@ -114,17 +116,17 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public Set<User> getMutualFriends(Long firstUserId, Long secondUserId) {
-        Set<User> firstUserIdFriends = getConfirmedFriends(firstUserId);
-        Set<User> secondUserIdFriends = getConfirmedFriends(secondUserId);
-        return firstUserIdFriends.stream().filter(secondUserIdFriends::contains).collect(Collectors.toSet());
+    public List<User> getCommonFriends(Long firstUserId, Long secondUserId) {
+        List<User> firstUserIdFriends = getConfirmedFriends(firstUserId);
+        List<User> secondUserIdFriends = getConfirmedFriends(secondUserId);
+        return firstUserIdFriends.stream().filter(secondUserIdFriends::contains).collect(Collectors.toList());
     }
 
     @Override
-    public Set<User> getUserFriend(Long userId) {
-        Set<User> usersFriends = getConfirmedFriends(userId);
+    public List<User> getUserFriend(Long userId) {
+        List<User> usersFriends = getConfirmedFriends(userId);
         if (usersFriends == null) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
         return usersFriends;
     }
@@ -134,11 +136,12 @@ public class InMemoryUserStorage implements UserStorage {
         return ++id;
     }
 
-    private Set<User> getConfirmedFriends(Long userId) {
+    private List<User> getConfirmedFriends(Long userId) {
         return userFriends.getOrDefault(userId, Collections.emptyMap()).entrySet().stream()
                 .filter(entry -> entry.getValue() == FriendShipStatus.CONFIRMED)
                 .map(Map.Entry::getKey)
                 .map(users::get)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }
+*/

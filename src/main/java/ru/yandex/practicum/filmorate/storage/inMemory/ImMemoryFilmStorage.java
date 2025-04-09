@@ -1,10 +1,12 @@
-package ru.yandex.practicum.filmorate.storage.film;
+/*
+package ru.yandex.practicum.filmorate.storage.inMemory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -16,6 +18,7 @@ public class ImMemoryFilmStorage implements FilmStorage {
 
     private final Map<Long, Film> films = new HashMap<>();
     private static Map<Long, Set<Long>> filmLikes = new HashMap<>();
+
 
     @Override
     public Film addFilm(Film film) {
@@ -49,7 +52,7 @@ public class ImMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film getFilmById(Long id) {
+    public Optional<Film> getFilmById(Long id) {
         return films.get(id);
     }
 
@@ -67,12 +70,12 @@ public class ImMemoryFilmStorage implements FilmStorage {
         filmLikes.get(filmId).remove(userId);
     }
 
-    public Set<Film> getTheMostPopularFilm(int count) {
+    public List<Film> getTheMostPopularFilm(int count) {
         if (getAllFilms() == null) {
             log.trace("Фильмы не найдены");
             throw new NotFoundException("Не удалось найти фильмы");
         }
-        return getAllFilms().stream().sorted(Comparator.comparing(film -> filmLikes.get(film.getId()).size())).collect(Collectors.toSet());
+        return getAllFilms().stream().sorted(Comparator.comparing(film -> filmLikes.get(film.getId()).size())).collect(Collectors.toList());
     }
 
     private void validateFilm(final Film film) {
@@ -88,3 +91,4 @@ public class ImMemoryFilmStorage implements FilmStorage {
         return ++id;
     }
 }
+*/

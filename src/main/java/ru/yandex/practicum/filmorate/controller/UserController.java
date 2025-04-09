@@ -3,58 +3,53 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dto.userDto.NewUserRequest;
+import ru.yandex.practicum.filmorate.dto.userDto.UpdateUserRequest;
+import ru.yandex.practicum.filmorate.dto.userDto.UserDto;
 import ru.yandex.practicum.filmorate.model.User;
 
 import jakarta.validation.Valid;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 
 @RestController
 @Slf4j
 public class UserController {
-    private final UserStorage userStorage;
+
     private final UserService userService;
 
 
     @Autowired
-    public UserController(UserStorage userStorage, UserService userService) {
-        this.userStorage = userStorage;
+    public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    public UserController() {
-        userStorage = new InMemoryUserStorage();
-        userService = new UserService(userStorage);
     }
 
 
     @GetMapping("/users")
-    public Collection<User> findAllUsers() {
-        return userStorage.findAllUsers();
+    public List<UserDto> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @GetMapping("/users/{id}")
-    public User getUsersById(@PathVariable Long id) {
-        return userStorage.getUserById(id);
+    public UserDto getUsersById(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 
     @PostMapping("/users")
-    public User addUser(@Valid @RequestBody final User user) {
-        return userStorage.addUser(user);
+    public UserDto addUser(@Valid @RequestBody final NewUserRequest user) {
+        return userService.addUser(user);
     }
 
 
     @PutMapping("/users")
-    public User updateUser(@Valid @RequestBody User newUser) {
-        return userStorage.updateUser(newUser);
+    public UserDto updateUser(@Valid @RequestBody UpdateUserRequest user) {
+        return userService.updateUser(user.getId(),user);
     }
 
     @PutMapping("/users/{id}/friends/{friendId}")
@@ -71,13 +66,13 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}/friends")
-    public Set<User> getUserFriend(@PathVariable Long id) {
+    public List<User> getUserFriend(@PathVariable Long id) {
         return userService.getUserFriend(id);
     }
 
     @GetMapping("/users/{id}/friends/common/{otherId}")
-    public Set<User> getMutualFriends(@PathVariable("id") Long firstUserId, @PathVariable("otherId") Long secondUserId) {
-        return userService.getMutualFriends(firstUserId, secondUserId);
+    public List<User> getMutualFriends(@PathVariable("id") Long firstUserId, @PathVariable("otherId") Long secondUserId) {
+        return userService.getCommonFriends(firstUserId, secondUserId);
     }
 
 
