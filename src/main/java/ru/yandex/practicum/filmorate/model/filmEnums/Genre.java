@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.model.filmEnums;
 
 import lombok.Getter;
 
+import java.util.Optional;
+
 @Getter
 public enum Genre {
     COMEDY("Комедия"),
@@ -19,6 +21,15 @@ public enum Genre {
 
     Genre(String name) {
         this.name = name;
+    }
+
+    public static Optional<Genre> fromName(String name) {
+        for (Genre genre : values()) {
+            if (genre.getName().equalsIgnoreCase(name)) {
+                return Optional.of(genre);
+            }
+        }
+        return Optional.empty();
     }
 
 }

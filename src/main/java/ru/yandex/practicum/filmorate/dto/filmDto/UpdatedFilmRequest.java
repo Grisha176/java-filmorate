@@ -2,8 +2,13 @@ package ru.yandex.practicum.filmorate.dto.filmDto;
 
 import lombok.Data;
 import lombok.NonNull;
+import ru.yandex.practicum.filmorate.model.FilmGenre;
+import ru.yandex.practicum.filmorate.model.FilmRating;
+import ru.yandex.practicum.filmorate.model.filmEnums.Genre;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class UpdatedFilmRequest {
@@ -14,6 +19,8 @@ public class UpdatedFilmRequest {
     private LocalDate releaseDate;
     private int duration;
     private Integer mpaRatingId;
+    private Set<FilmGenre> filmGenre = new HashSet<>();
+
 
     public boolean hasName() {
         return ! (name == null || name.isBlank());
@@ -29,4 +36,7 @@ public class UpdatedFilmRequest {
     public boolean hasDuration(){return ! (duration == 0);}
 
     public boolean hasRating(){return ! (mpaRatingId == null);}
+
+    public boolean hasGenre(){return ! (filmGenre == null);}
+
 }

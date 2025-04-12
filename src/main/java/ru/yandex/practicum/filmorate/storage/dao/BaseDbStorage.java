@@ -37,6 +37,9 @@ public class BaseDbStorage<T> {
             PreparedStatement ps = connection
                     .prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             for (int idx = 0; idx < params.length; idx++) {
+                if(params[idx] == null){
+                    params[idx] = null;
+                }
                 ps.setObject(idx + 1, params[idx]);
             }
             return ps;

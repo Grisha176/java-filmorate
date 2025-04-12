@@ -67,6 +67,11 @@ public class FilmController {
         return new ResponseEntity<>("{\"message\":\"Удаление лайка прошло успешно\"}", HttpStatus.OK);
     }
 
+    @GetMapping("/films/{id}")
+    public FilmDto getFilmsByGenreId(@PathVariable Long id){
+        return filmService.getFilmById(id);
+    }
+
     @GetMapping("/genres")
     public List<FilmGenre> getAllFilmGenre(){
         return filmService.getAllFilmGenre();

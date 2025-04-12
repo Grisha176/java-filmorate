@@ -6,5 +6,5 @@ import ru.yandex.practicum.filmorate.model.filmEnums.Genre;
 @Data
 public class FilmGenre {
     private Long id;
-    private Genre genre;
+    private String name;
 }

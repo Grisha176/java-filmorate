@@ -30,6 +30,7 @@ public class FilmService {
     @Qualifier("FilmDbStorage")
     private final FilmStorage filmStorage;
     private final GenreDbStorage genreStorage;
+    @Qualifier("UserDbStorage")
     private final UserStorage userStorage;
     private final RatingDbStorage ratingStorage;
 
@@ -44,6 +45,10 @@ public class FilmService {
 
     public FilmDto addFilm(NewFilmRequest request){
         Film film = FilmMapper.mapToFilm(request);
+        for(FilmGenre filmGenre : film.getFilmGenre()){
+            genreStorage.getFilmGenreById(filmGenre.getId().intValue()).orElseThrow(() -> new NotFoundException("Жанр с id:"+filmGenre.getId()+" не найден"));
+        }
+
         film = filmStorage.addFilm(film);
         return FilmMapper.mapToFilmDto(film);
     }
@@ -59,7 +64,6 @@ public class FilmService {
         Film film = filmStorage.getFilmById(filmId).orElseThrow(() -> new NotFoundException("Фильм с id:"+filmId+" не найден"));
         film = FilmMapper.updateFields(film,request);
         film = filmStorage.updateFilm(film);
-        System.out.println(ratingStorage.getFilmRating(film.getMpaRatingId())+" lsdnansdfnasfna;sn");
         return FilmMapper.mapToFilmDto(film);
     }
 
@@ -76,6 +80,10 @@ public class FilmService {
         return filmStorage.getAllFilms().stream().map(FilmMapper::mapToFilmDto).collect(Collectors.toList());
     }
 
+    public List<FilmDto> getFilmsByGenreId(int id){
+        return filmStorage.getFilmsByGenreId(id).stream().map(FilmMapper::mapToFilmDto).collect(Collectors.toList());
+    }
+
     public FilmDto getFilmById(Long id){
         Film film = filmStorage.getFilmById(id).orElseThrow(() -> new NotFoundException("Фильм с id:"+id+" не найден"));
         return FilmMapper.mapToFilmDto(film);
@@ -88,7 +96,6 @@ public class FilmService {
     public List<FilmRating> getAllRating(){
         return ratingStorage.getAllRating();
     }
-
 
 
     public List<FilmDto> getTheMostPopularFilm(int count) {

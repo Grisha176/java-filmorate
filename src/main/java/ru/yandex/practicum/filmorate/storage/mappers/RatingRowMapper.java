@@ -16,7 +16,7 @@ public class RatingRowMapper implements RowMapper<FilmRating> {
     public FilmRating mapRow(ResultSet rs, int rowNum) throws SQLException {
         FilmRating filmRating = new FilmRating();
         filmRating.setId(rs.getInt("mpa_rating_id"));
-        filmRating.setRating(MpaRating.valueOf(rs.getString("rating")));
+        filmRating.setName(rs.getString("rating"));
         return filmRating;
     }
 }

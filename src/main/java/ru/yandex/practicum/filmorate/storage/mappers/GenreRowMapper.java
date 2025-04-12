@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.filmEnums.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Component
 public class GenreRowMapper implements RowMapper<FilmGenre> {
@@ -14,8 +15,7 @@ public class GenreRowMapper implements RowMapper<FilmGenre> {
     public FilmGenre mapRow(ResultSet rs, int rowNum) throws SQLException {
         FilmGenre filmGenre = new FilmGenre();
         filmGenre.setId(rs.getLong("genre_id"));
-        filmGenre.setGenre(Genre.valueOf(rs.getString("name")));
+        filmGenre.setName(rs.getString("genre"));
         return filmGenre;
-
     }
 }

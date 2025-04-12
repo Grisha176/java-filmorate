@@ -1,8 +1,11 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.model.filmEnums.Genre;
+
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -22,7 +25,21 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должна быть положительной")
     private int duration;
-    //private Set<Genre> filmGenre = new HashSet<>();
-    private Integer mpaRatingId;
+    private Set<FilmGenre> filmGenre = new HashSet<>();
+    private FilmRating mpa;
+
+    /*public String getMpa(){
+        ObjectMapper mapper = new ObjectMapper();
+        String filmRating;
+        try {
+            filmRating = mapper.writeValueAsString(mpa);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return filmRating;
+    }
+    /*public Integer getMpaId(){
+        return mpa.getId();
+    }*/
 
 }
