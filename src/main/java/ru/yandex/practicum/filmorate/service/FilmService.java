@@ -20,7 +20,6 @@ import ru.yandex.practicum.filmorate.storage.dao.RatingDbStorage;
 
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -43,10 +42,10 @@ public class FilmService {
     }
 
 
-    public FilmDto addFilm(NewFilmRequest request){
+    public FilmDto addFilm(NewFilmRequest request) {
         Film film = FilmMapper.mapToFilm(request);
-        for(FilmGenre filmGenre : film.getFilmGenre()){
-            genreStorage.getFilmGenreById(filmGenre.getId().intValue()).orElseThrow(() -> new NotFoundException("Жанр с id:"+filmGenre.getId()+" не найден"));
+        for (FilmGenre filmGenre : film.getFilmGenre()) {
+            genreStorage.getFilmGenreById(filmGenre.getId().intValue()).orElseThrow(() -> new NotFoundException("Жанр с id:" + filmGenre.getId() + " не найден"));
         }
 
         film = filmStorage.addFilm(film);
@@ -60,40 +59,40 @@ public class FilmService {
     }
 
 
-    public FilmDto updateFilm(Long filmId, UpdatedFilmRequest request){
-        Film film = filmStorage.getFilmById(filmId).orElseThrow(() -> new NotFoundException("Фильм с id:"+filmId+" не найден"));
-        film = FilmMapper.updateFields(film,request);
+    public FilmDto updateFilm(Long filmId, UpdatedFilmRequest request) {
+        Film film = filmStorage.getFilmById(filmId).orElseThrow(() -> new NotFoundException("Фильм с id:" + filmId + " не найден"));
+        film = FilmMapper.updateFields(film, request);
         film = filmStorage.updateFilm(film);
         return FilmMapper.mapToFilmDto(film);
     }
 
 
-    public FilmGenre getFilmGenreById(int genre_id){
-        return genreStorage.getFilmGenreById(genre_id).orElseThrow(() -> new NotFoundException("Genre с id:"+genre_id+" не найден"));
+    public FilmGenre getFilmGenreById(int genreId) {
+        return genreStorage.getFilmGenreById(genreId).orElseThrow(() -> new NotFoundException("Genre с id:" + genreId + " не найден"));
     }
 
-    public List<FilmGenre> getAllFilmGenre(){
+    public List<FilmGenre> getAllFilmGenre() {
         return genreStorage.getAllGenre();
     }
 
-    public List<FilmDto> getAllFilms(){
+    public List<FilmDto> getAllFilms() {
         return filmStorage.getAllFilms().stream().map(FilmMapper::mapToFilmDto).collect(Collectors.toList());
     }
 
-    public List<FilmDto> getFilmsByGenreId(int id){
+    public List<FilmDto> getFilmsByGenreId(int id) {
         return filmStorage.getFilmsByGenreId(id).stream().map(FilmMapper::mapToFilmDto).collect(Collectors.toList());
     }
 
-    public FilmDto getFilmById(Long id){
-        Film film = filmStorage.getFilmById(id).orElseThrow(() -> new NotFoundException("Фильм с id:"+id+" не найден"));
+    public FilmDto getFilmById(Long id) {
+        Film film = filmStorage.getFilmById(id).orElseThrow(() -> new NotFoundException("Фильм с id:" + id + " не найден"));
         return FilmMapper.mapToFilmDto(film);
     }
 
-    public FilmRating getRatingById(int id){
-        return ratingStorage.getFilmRating(id).orElseThrow(() -> new NotFoundException("Rating с id:"+id+" не найден"));
+    public FilmRating getRatingById(int id) {
+        return ratingStorage.getFilmRating(id).orElseThrow(() -> new NotFoundException("Rating с id:" + id + " не найден"));
     }
 
-    public List<FilmRating> getAllRating(){
+    public List<FilmRating> getAllRating() {
         return ratingStorage.getAllRating();
     }
 
@@ -110,7 +109,7 @@ public class FilmService {
     }
 
     private void validate(Long filmId, Long userId) {
-        Film film = filmStorage.getFilmById(filmId).orElseThrow(() ->  new NotFoundException("Фильм с id " + filmId + " не найден"));
+        Film film = filmStorage.getFilmById(filmId).orElseThrow(() -> new NotFoundException("Фильм с id " + filmId + " не найден"));
         User user = userStorage.getUserById(userId).orElseThrow(() -> new NotFoundException("User с id " + userId + " не найден"));
     }
 }

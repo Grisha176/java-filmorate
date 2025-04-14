@@ -3,8 +3,6 @@ package ru.yandex.practicum.filmorate.dto.filmDto;
 import lombok.Data;
 import lombok.NonNull;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
-import ru.yandex.practicum.filmorate.model.FilmRating;
-import ru.yandex.practicum.filmorate.model.filmEnums.Genre;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -23,20 +21,27 @@ public class UpdatedFilmRequest {
 
 
     public boolean hasName() {
-        return ! (name == null || name.isBlank());
+        return !(name == null || name.isBlank());
     }
 
     public boolean hasDescription() {
-        return ! (description == null || description.isBlank());
+        return !(description == null || description.isBlank());
     }
 
     public boolean hasReleaseDate() {
-        return ! (releaseDate == null);
+        return !(releaseDate == null);
     }
-    public boolean hasDuration(){return ! (duration == 0);}
 
-    public boolean hasRating(){return ! (mpaRatingId == null);}
+    public boolean hasDuration() {
+        return !(duration == 0);
+    }
 
-    public boolean hasGenre(){return ! (filmGenre == null);}
+    public boolean hasRating() {
+        return !(mpaRatingId == null);
+    }
+
+    public boolean hasGenre() {
+        return !(filmGenre == null);
+    }
 
 }

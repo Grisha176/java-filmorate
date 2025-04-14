@@ -43,7 +43,7 @@ public class FilmController {
 
     @PutMapping("/films")
     public FilmDto updateFilm(@Valid @RequestBody UpdatedFilmRequest film) {
-        return filmService.updateFilm(film.getId(),film);
+        return filmService.updateFilm(film.getId(), film);
     }
 
   /*  @PutMapping("/films/{id}")
@@ -68,33 +68,29 @@ public class FilmController {
     }
 
     @GetMapping("/films/{id}")
-    public FilmDto getFilmsByGenreId(@PathVariable Long id){
+    public FilmDto getFilmsByGenreId(@PathVariable Long id) {
         return filmService.getFilmById(id);
     }
 
     @GetMapping("/genres")
-    public List<FilmGenre> getAllFilmGenre(){
+    public List<FilmGenre> getAllFilmGenre() {
         return filmService.getAllFilmGenre();
     }
 
     @GetMapping("/genres/{id}")
-    public FilmGenre getFilmGereById(@PathVariable int id){
+    public FilmGenre getFilmGereById(@PathVariable int id) {
         return filmService.getFilmGenreById(id);
     }
 
     @GetMapping("/mpa")
-    public List<FilmRating> getAllFilmRating(){
+    public List<FilmRating> getAllFilmRating() {
         return filmService.getAllRating();
     }
 
     @GetMapping("/mpa/{id}")
-    public FilmRating getFilmRatingById(@PathVariable int id){
+    public FilmRating getFilmRatingById(@PathVariable int id) {
         return filmService.getRatingById(id);
     }
-
-
-
-
 
 
 }

@@ -18,7 +18,7 @@ public class BaseDbStorage<T> {
     private final JdbcTemplate jdbc;
     private final RowMapper<T> mapper;
 
-    protected Optional<T> findOne(String query,Object... params){
+    protected Optional<T> findOne(String query, Object... params) {
         try {
             T result = jdbc.queryForObject(query, mapper, params);
             return Optional.ofNullable(result);
@@ -27,17 +27,17 @@ public class BaseDbStorage<T> {
         }
     }
 
-    protected List<T> findMany(String query, Object... params){
-          return jdbc.query(query,mapper,params);
+    protected List<T> findMany(String query, Object... params) {
+        return jdbc.query(query, mapper, params);
     }
 
-    protected Long insert(String query,Object... params){
+    protected Long insert(String query, Object... params) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(connection -> {
             PreparedStatement ps = connection
                     .prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             for (int idx = 0; idx < params.length; idx++) {
-                if(params[idx] == null){
+                if (params[idx] == null) {
                     params[idx] = null;
                 }
                 ps.setObject(idx + 1, params[idx]);
@@ -59,17 +59,17 @@ public class BaseDbStorage<T> {
         }
     }
 
-    protected void update(String query,Object... params){
-      int rowsUpdated = jdbc.update(query,params);
-      if (rowsUpdated == 0) {
-          throw new InternalServerException("Не удалось обновить данные");
-      }
+    protected void update(String query, Object... params) {
+        int rowsUpdated = jdbc.update(query, params);
+        if (rowsUpdated == 0) {
+            throw new InternalServerException("Не удалось обновить данные");
+        }
     }
-    protected boolean delete(String query,Object... params){
+
+    protected boolean delete(String query, Object... params) {
         int rowsUpdated = jdbc.update(query, params);
         return rowsUpdated > 0;
     }
-
 
 
 }

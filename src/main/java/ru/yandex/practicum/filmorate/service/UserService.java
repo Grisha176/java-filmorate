@@ -28,20 +28,21 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
-    public UserDto getUserById(Long id){
-        return UserMapper.mapToUserDto(userStorage.getUserById(id).orElseThrow(()-> new NotFoundException("Пользователь с id:"+id+" не найден")));
+    public UserDto getUserById(Long id) {
+        return UserMapper.mapToUserDto(userStorage.getUserById(id).orElseThrow(() -> new NotFoundException("Пользователь с id:" + id + " не найден")));
     }
 
-    public List<UserDto> getAllUsers(){
+    public List<UserDto> getAllUsers() {
         return userStorage.getAllUsers().stream().map(UserMapper::mapToUserDto).collect(Collectors.toList());
     }
 
-    public UserDto addUser(NewUserRequest userRequest){
+    public UserDto addUser(NewUserRequest userRequest) {
         User user = UserMapper.mapToUser(userRequest);
         user = userStorage.addUser(user);
         return UserMapper.mapToUserDto(user);
     }
-    public UserDto updateUser(Long userId, UpdateUserRequest updateUserRequest){
+
+    public UserDto updateUser(Long userId, UpdateUserRequest updateUserRequest) {
         User updatedUser = userStorage.getUserById(userId)
                 .map(user -> UserMapper.updateUserFields(user, updateUserRequest))
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
@@ -51,25 +52,25 @@ public class UserService {
 
 
     public void addFriend(Long userId, Long friendId) {
-        validate(userId,friendId);
-        userStorage.addFriend(userId,friendId, FriendShipStatus.CONFIRMED);
+        validate(userId, friendId);
+        userStorage.addFriend(userId, friendId, FriendShipStatus.CONFIRMED);
 
     }
 
     public boolean deleteFriend(Long userId, Long friendId) {
-        validate(userId,friendId);
-         return userStorage.deleteFriend(userId,friendId);
+        validate(userId, friendId);
+        return userStorage.deleteFriend(userId, friendId);
     }
 
 
     public List<User> getCommonFriends(Long firstUserId, Long secondUserId) {
-         validate(firstUserId,secondUserId);
-         return userStorage.getCommonFriends(firstUserId,secondUserId);
+        validate(firstUserId, secondUserId);
+        return userStorage.getCommonFriends(firstUserId, secondUserId);
     }
 
     public List<User> getUserFriend(Long userId) {
-          validate(userId,userId);
-         return userStorage.getUserFriend(userId);
+        validate(userId, userId);
+        return userStorage.getUserFriend(userId);
     }
 
 
@@ -77,7 +78,6 @@ public class UserService {
         User user = userStorage.getUserById(firstId).orElseThrow(() -> new NotFoundException("Пользователь с id " + firstId + " не найден"));
         User userAddedInFriendId = userStorage.getUserById(secondId).orElseThrow(() -> new NotFoundException("Пользователь с id " + firstId + " не найден"));
     }
-
 
 
 }

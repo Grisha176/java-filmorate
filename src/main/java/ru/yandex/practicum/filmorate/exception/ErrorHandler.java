@@ -5,7 +5,6 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -69,7 +68,7 @@ public class ErrorHandler {
     public ErrorResponse handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         if (ex.getMessage() != null && ex.getMessage().contains("release_date")) {
             //return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                  //  .body("Release date must be on or after 1895-12-28");
+            //  .body("Release date must be on or after 1895-12-28");
             return new ErrorResponse("Дата релитза не должна быть раньше 28,12,1895");
         }
         return new ErrorResponse("непиредвиденная ошибка");

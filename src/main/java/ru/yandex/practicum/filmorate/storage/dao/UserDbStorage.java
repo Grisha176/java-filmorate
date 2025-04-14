@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -13,8 +14,8 @@ import java.util.Optional;
 @Repository("UserDbStorage")
 public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
 
-    private final static String FIND_ALL_QUERY = "SELECT * FROM users";
-    private final static String INSERT_INTO_QUERY =
+    private static final String FIND_ALL_QUERY = "SELECT * FROM users";
+    private static final String INSERT_INTO_QUERY =
             "INSERT INTO users(name, email, login, birthday) " +
                     "VALUES(?,?,?,?)";
     private static final String UPDATE_QUERY = "UPDATE users SET name = ?,email = ?, login = ?,birthday = ? WHERE user_id = ?";
@@ -34,7 +35,9 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
             "FROM users u\n" +
             "JOIN user_friends uf ON u.user_id = uf.friend_id\n" +
             "WHERE uf.user_id = ? AND uf.status = 'confirmed';";
+    private static final String DELETE_ALL_USERS = "DELETE FROM users";
 
+    @Autowired
     public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
         super(jdbc, mapper);
     }
@@ -43,18 +46,19 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     public List<User> getAllUsers() {
         return findMany(FIND_ALL_QUERY);
     }
+
     @Override
     public Optional<User> getUserById(Long id) {
-        return findOne(FIND_QUERY,id);
+        return findOne(FIND_QUERY, id);
     }
 
     @Override
     public User addUser(User user) {
         long id = insert(INSERT_INTO_QUERY,
-                           user.getName(),
-                           user.getEmail(),
-                           user.getLogin(),
-                           user.getBirthday());
+                user.getName(),
+                user.getEmail(),
+                user.getLogin(),
+                user.getBirthday());
         user.setId(id);
         return user;
     }
@@ -62,33 +66,36 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     @Override
     public User updateUser(User user) {
         update(UPDATE_QUERY,
-                    user.getName(),
-                    user.getEmail(),
-                    user.getLogin(),
-                    user.getBirthday(),
-                    user.getId());
+                user.getName(),
+                user.getEmail(),
+                user.getLogin(),
+                user.getBirthday(),
+                user.getId());
         return user;
     }
 
 
-
     @Override
     public void addFriend(Long userId, Long friendId, FriendShipStatus status) {
-        insert(INSERT_FRIEND_QUERY,userId,friendId,String.valueOf(status));
+        insert(INSERT_FRIEND_QUERY, userId, friendId, String.valueOf(status));
     }
 
     @Override
     public boolean deleteFriend(Long userId, Long friendId) {
-          return delete(DELETE_FRIEND_QUERY,userId,friendId);
+        return delete(DELETE_FRIEND_QUERY, userId, friendId);
     }
 
     @Override
     public List<User> getCommonFriends(Long firstUserId, Long secondUserId) {
-         return findMany(GET_COMMON_FRIENDS,firstUserId,secondUserId);
+        return findMany(GET_COMMON_FRIENDS, firstUserId, secondUserId);
     }
 
     @Override
     public List<User> getUserFriend(Long userId) {
-        return findMany(GET_USER_FRIEND_QUERY,userId);
+        return findMany(GET_USER_FRIEND_QUERY, userId);
+    }
+
+    public void deleteAllUsers() {
+        delete(DELETE_ALL_USERS);
     }
 }

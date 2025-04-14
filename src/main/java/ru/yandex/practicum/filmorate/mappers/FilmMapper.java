@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.model.FilmRating;
 
 public class FilmMapper {
 
-    public static Film mapToFilm(NewFilmRequest request){
+    public static Film mapToFilm(NewFilmRequest request) {
         Film film = new Film();
         film.setName(request.getName());
         film.setDescription(request.getDescription());
@@ -57,23 +57,23 @@ public class FilmMapper {
         return filmDto;
     }
 
-    public static Film updateFields(Film film, UpdatedFilmRequest request){
-        if(request.hasName()){
+    public static Film updateFields(Film film, UpdatedFilmRequest request) {
+        if (request.hasName()) {
             film.setName(request.getName());
         }
-        if(request.hasDescription()){
+        if (request.hasDescription()) {
             film.setDescription(request.getDescription());
         }
-        if(request.hasReleaseDate()){
+        if (request.hasReleaseDate()) {
             film.setReleaseDate(request.getReleaseDate());
         }
-        if(request.hasDuration()){
+        if (request.hasDuration()) {
             film.setDuration(request.getDuration());
         }
-        if(request.hasRating()){
-          // film.setMpa(request.getMpaRatingId());
+        if (request.hasRating()) {
+            // film.setMpa(request.getMpaRatingId());
         }
-        if(request.hasGenre()){
+        if (request.hasGenre()) {
             film.setFilmGenre(request.getFilmGenre());
         }
         return film;

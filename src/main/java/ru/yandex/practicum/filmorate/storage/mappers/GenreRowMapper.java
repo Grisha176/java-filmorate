@@ -3,11 +3,9 @@ package ru.yandex.practicum.filmorate.storage.mappers;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
-import ru.yandex.practicum.filmorate.model.filmEnums.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 @Component
 public class GenreRowMapper implements RowMapper<FilmGenre> {

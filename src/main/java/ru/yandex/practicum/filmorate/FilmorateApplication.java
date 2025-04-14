@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import jakarta.annotation.PostConstruct;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "ru.yandex.practicum.filmorate")
 public class FilmorateApplication {
 
     @Value("${app.custom-property}")

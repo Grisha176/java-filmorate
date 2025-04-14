@@ -4,7 +4,6 @@ package ru.yandex.practicum.filmorate.dto.filmDto;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 import ru.yandex.practicum.filmorate.model.FilmRating;
-import ru.yandex.practicum.filmorate.model.filmEnums.Genre;
 
 import java.time.LocalDate;
 import java.util.HashSet;
