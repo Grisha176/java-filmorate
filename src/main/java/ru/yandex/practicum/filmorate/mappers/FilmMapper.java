@@ -35,7 +35,7 @@ public class FilmMapper {
             mpaDto = film.getMpa();
             filmDto.setMpa(mpaDto);
         } else {
-            filmDto.setMpa(null); // Если mpa отсутствует, устанавливаем null
+            filmDto.setMpa(null);
         }
 
         return filmDto;
@@ -55,7 +55,7 @@ public class FilmMapper {
             film.setDuration(request.getDuration());
         }
         if (request.hasRating()) {
-            // film.setMpa(request.getMpaRatingId());
+            film.setMpa(request.getMpa());
         }
         if (request.hasGenre()) {
             film.setFilmGenre(request.getFilmGenre());
