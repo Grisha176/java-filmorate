@@ -1,8 +1,9 @@
-package ru.yandex.practicum.filmorate.model;
+package ru.yandex.practicum.filmorate.dto.filmDto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-
+import ru.yandex.practicum.filmorate.model.FilmGenre;
+import ru.yandex.practicum.filmorate.model.FilmRating;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -10,9 +11,7 @@ import java.util.Set;
 
 
 @Data
-public class Film {
-
-    private Long id;
+public class NewFilmRequest {
     @NotBlank(message = "Название фильма не может быть пустым")
     private String name;
     @Size(max = 200, message = "Описание не должно превышать 200 символов")
@@ -22,21 +21,8 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должна быть положительной")
     private int duration;
-    private Set<FilmGenre> filmGenre = new HashSet<>();
+    private Set<FilmGenre> genres = new HashSet<>();
     private FilmRating mpa;
 
-    /*public String getMpa(){
-        ObjectMapper mapper = new ObjectMapper();
-        String filmRating;
-        try {
-            filmRating = mapper.writeValueAsString(mpa);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return filmRating;
-    }
-    /*public Integer getMpaId(){
-        return mpa.getId();
-    }*/
 
 }

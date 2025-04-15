@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.model;
+package ru.yandex.practicum.filmorate.dto.userDto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -6,10 +6,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-
-public class User {
-
-    private Long id;
+public class NewUserRequest {
     @NotBlank(message = "email не может быть пустым")
     @Email(message = "неверный email формат")
     private String email;
@@ -22,4 +19,3 @@ public class User {
     private LocalDate birthday;
 
 }
-
