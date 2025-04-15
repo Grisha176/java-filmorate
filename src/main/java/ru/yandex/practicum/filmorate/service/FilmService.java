@@ -44,8 +44,17 @@ public class FilmService {
 
     public FilmDto addFilm(NewFilmRequest request) {
         Film film = FilmMapper.mapToFilm(request);
-        for (FilmGenre filmGenre : film.getFilmGenre()) {
-            genreStorage.getFilmGenreById(filmGenre.getId().intValue()).orElseThrow(() -> new NotFoundException("Жанр с id:" + filmGenre.getId() + " не найден"));
+        List<Long> genres = genreStorage.getAllGenre().stream()
+                .map(FilmGenre::getId)
+                .toList();
+
+        List<Long> missingGenre = film.getFilmGenre().stream()
+                .map(FilmGenre::getId)
+                .filter(id -> !genres.contains(id))
+                .toList();
+
+        if (!missingGenre.isEmpty()) {
+            throw new NotFoundException("Следующие жанры не найдены:" + missingGenre);
         }
 
         film = filmStorage.addFilm(film);

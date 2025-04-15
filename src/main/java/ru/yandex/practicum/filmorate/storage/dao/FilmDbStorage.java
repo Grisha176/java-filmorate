@@ -113,9 +113,12 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
                 .map(FilmGenre::getId)
                 .collect(Collectors.toSet());
         if (!filmGenreIds.isEmpty()) {
+            List<Object[]> args = new ArrayList<>();
+
             for (Long genreId : filmGenreIds) {
-                insert(INSERT_INTO_FILM_GENRE_QUERY, film.getId(), genreId);
+                args.add(new Object[]{film.getId(), genreId});
             }
+            jdbc.batchUpdate(INSERT_INTO_FILM_GENRE_QUERY, args);
             return true;
         }
         return allGenreIds.containsAll(filmGenreIds);

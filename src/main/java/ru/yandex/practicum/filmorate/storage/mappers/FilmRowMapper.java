@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 import java.util.stream.Collectors;
 
 @Component
-public class FilmRowMapper implements RowMapper<Film> {
+public class    FilmRowMapper implements RowMapper<Film> {
 
     @Autowired
     private RatingDbStorage ratingDbStorage;

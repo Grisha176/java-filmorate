@@ -20,22 +20,6 @@ public class FilmMapper {
         return film;
     }
 
-   /* public static FilmDto mapToFilmDto(Film film){
-        FilmDto filmDto = new FilmDto();
-        filmDto.setId(film.getId());
-        filmDto.setName(film.getName());
-        filmDto.setDescription(film.getDescription());
-        filmDto.setReleaseDate(film.getReleaseDate());
-        filmDto.setDuration(film.getDuration());
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String filmRating = mapper.writeValueAsString(film.getMpa());
-            filmDto.setMpa(filmRating);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return filmDto;
-    }*/
 
     public static FilmDto mapToFilmDto(Film film) {
         FilmDto filmDto = new FilmDto();
